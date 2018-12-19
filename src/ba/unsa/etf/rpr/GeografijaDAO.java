@@ -54,7 +54,7 @@ public class GeografijaDAO {
         ArrayList<Grad> gradovi=new ArrayList<>();
         try {
             Statement stmt = conn.createStatement();
-            String query="SELECT naziv, broj_stanovnika, drzava FROM grad ORDER BY broj_stanovnika";
+            String query="SELECT naziv, broj_stanovnika, drzava FROM grad ORDER BY broj_stanovnika DESC";
             ResultSet r=stmt.executeQuery(query);
             while(r.next()){
                 String ime=r.getString(1);
@@ -71,9 +71,10 @@ public class GeografijaDAO {
                 ResultSet t=stmt2.executeQuery(query2);
                 int id2=t.getInt(2);
                 String query3="SELECT naziv,broj_stanovnika from grad where id="+id2;
-                ResultSet tg=stmt3.executeQuery(query2);
+                ResultSet tg=stmt3.executeQuery(query3);
                 int brg=tg.getInt(2);
                 String imeg=tg.getString(1);
+                System.out.println(imeg);
                 Grad glavni=new Grad();
                 glavni.setBrojStanovnika(brg);
                 glavni.setNaziv(imeg);
@@ -82,6 +83,7 @@ public class GeografijaDAO {
                 g.setBrojStanovnika(br);
                 d.setGlavniGrad(glavni);
                 d.setNaziv(t.getString(1));
+                System.out.println(d.getNaziv());
                 gradovi.add(g);
             }
         } catch (SQLException e) {
@@ -121,12 +123,15 @@ public class GeografijaDAO {
         try {
             obrisiDr.setString(1, drzava);
             ResultSet result = glavniG.executeQuery();
+            if(!result.isClosed()){
             int id=result.getInt(1);
             Statement stmt = conn.createStatement();
+            Statement stmt2 = conn.createStatement();
+
             String query="DELETE FROM grad WHERE drzava="+id;
             String query2="DELETE FROM drzava WHERE id="+id;
             stmt.execute(query);
-            stmt.execute(query2);
+            stmt2.execute(query2);}
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
