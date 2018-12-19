@@ -86,7 +86,7 @@ class GeografijaDAOTest {
         // Provjera
         Grad proba = dao.glavniGrad("Bosna i Hercegovina");
         assertEquals("Sarajevo", proba.getNaziv());
-        assertEquals(500000, proba.getBrojStanovnika());
+        assertEquals(java.util.Optional.of(500000), proba.getBrojStanovnika());
         assertEquals("Bosna i Hercegovina", proba.getDrzava().getNaziv());
     }
 

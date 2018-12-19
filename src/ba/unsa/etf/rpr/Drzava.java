@@ -2,8 +2,12 @@ package ba.unsa.etf.rpr;
 
 public class Drzava {
     private String naziv;
-    private int brojStanovnika;
     private Grad glavniGrad;
+
+    public Grad getGlavniGrad() {
+        return glavniGrad;
+    }
+
     public String getNaziv() {
         return naziv;
     }
@@ -15,4 +19,5 @@ public class Drzava {
     public void setGlavniGrad(Grad grad) {
     glavniGrad=grad;
     }
+
 }
