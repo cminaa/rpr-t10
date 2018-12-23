@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Main {
- /*   static String ispisiGradove(){
-        GeografijaDAO geo = null;
+    static String ispisiGradove(){
+        GeografijaDAO geo=GeografijaDAO.getInstance();
         String s="";
         ArrayList<Grad> g=geo.gradovi();
         for (int i = 0; i < g.size(); i++) {
@@ -17,12 +17,11 @@ public class Main {
             s+="\n";
         }
         return s;
-    }*/
+    }
 
     public static void main(String[] args) {
-        //System.out.println("Gradovi su:\n" + ispisiGradove());
-       // glavniGrad();
-        GeografijaDAO baza=GeografijaDAO.getInstance();
+        System.out.println("Gradovi su:\n" + ispisiGradove());
+       //glavniGrad();
     }
 
 

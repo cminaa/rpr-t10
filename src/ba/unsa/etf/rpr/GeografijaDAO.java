@@ -7,6 +7,11 @@ import java.util.Random;
 
 public class GeografijaDAO {
     private static GeografijaDAO instanca=null;
+
+    public static Connection getConn() {
+        return conn;
+    }
+
     private static Connection conn;
     PreparedStatement glavniG;
     PreparedStatement obrisiDr;
@@ -19,11 +24,11 @@ public class GeografijaDAO {
     }
 
     private GeografijaDAO() {
-        /*try {
+        try {
             Class.forName("org.sqlite.JDBC");
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
-        }*/
+        }
         String url="jdbc:sqlite:src\\baza.db";
         try {
             conn=DriverManager.getConnection(url);
@@ -31,10 +36,29 @@ public class GeografijaDAO {
             obrisiDr = conn.prepareStatement("SELECT id from drzava WHERE naziv=?");
             dodajDr = conn.prepareStatement("INSERT INTO drzava(id,naziv,glavni_grad) VALUES (?,?,?)");
             dodajG = conn.prepareStatement("INSERT INTO grad (id,naziv,broj_stanovnika,drzava) VALUES(?,?,?,?)");
-            izmijeniGr = conn.prepareStatement("UPDATE grad\n" +
-                    "SET naziv =?, broj_stanovnika = ?,drzava=? \n" +
-                    "WHERE naziv=?");
+            izmijeniGr = conn.prepareStatement("UPDATE grad SET naziv =?, broj_stanovnika = ?,drzava=? WHERE id=?");
             nadjiDr=conn.prepareStatement("SELECT id FROM drzava WHERE naziv=?");
+          /*  Statement stmt = conn.createStatement();
+            Statement stmt1 = conn.createStatement();
+            Statement stmt2 = conn.createStatement();
+            Statement stmt3 = conn.createStatement();
+            Statement stmt4 = conn.createStatement();
+            Statement stmt5 = conn.createStatement();
+            Statement stmt6 = conn.createStatement();
+            Statement stmt7 = conn.createStatement();
+            Statement stmt8 = conn.createStatement();
+            Statement stmt9 = conn.createStatement();
+            stmt.execute("DELETE FROM grad");
+            stmt1.execute("delete from drzava");
+            stmt3.execute("INSERT INTO grad(id,naziv,broj_stanovnika,drzava) VALUES (1,'London',88250000,1)");
+            stmt4.execute("INSERT INTO grad(id,naziv,broj_stanovnika,drzava) VALUES (2,'Beč',1899055,2)");
+            stmt5.execute("INSERT INTO grad(id,naziv,broj_stanovnika,drzava) VALUES (3,'Pariz',2206488,3)");
+            stmt2.execute("INSERT INTO grad(id,naziv,broj_stanovnika,drzava) VALUES (4,'Mancherster', 545500,1)");
+            stmt6.execute("INSERT INTO grad(id,naziv,broj_stanovnika,drzava) VALUES (5,'Graz',280200,2)");
+            stmt7.execute("INSERT INTO drzava(id,naziv,glavni_grad) VALUES (1,'Velika Britanija', 1)");
+            stmt8.execute("INSERT INTO drzava(id,naziv,glavni_grad) VALUES (2,'Austrija',2)");
+            stmt9.execute("INSERT INTO drzava(id,naziv,glavni_grad) VALUES (3,'Francuska',3)");*/
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -53,8 +77,11 @@ public class GeografijaDAO {
     public ArrayList<Grad> gradovi() {
         ArrayList<Grad> gradovi=new ArrayList<>();
         try {
+            if(conn==null){
+                conn=DriverManager.getConnection("jdbc:sqlite:src\\baza.db");
+            }
             Statement stmt = conn.createStatement();
-            String query="SELECT naziv, broj_stanovnika, drzava FROM grad ORDER BY broj_stanovnika DESC";
+            String query="SELECT naziv, broj_stanovnika, drzava,id FROM grad ORDER BY broj_stanovnika DESC";
             ResultSet r=stmt.executeQuery(query);
             while(r.next()){
                 String ime=r.getString(1);
@@ -69,17 +96,22 @@ public class GeografijaDAO {
                 Statement stmt3=conn.createStatement();
                 String query2="SELECT naziv, glavni_grad FROM drzava where id="+id;
                 ResultSet t=stmt2.executeQuery(query2);
-                int id2=t.getInt(2);
+                int id2=0;
+                if(!t.isClosed())
+                id2 = t.getInt(2);
                 String query3="SELECT naziv,broj_stanovnika from grad where id="+id2;
                 ResultSet tg=stmt3.executeQuery(query3);
-                int brg=tg.getInt(2);
-                String imeg=tg.getString(1);
+                int brg=0; String imeg = null;
+                if(!tg.isClosed()){
+                brg=tg.getInt(2);
+                imeg=tg.getString(1);}
                 System.out.println(imeg);
                 Grad glavni=new Grad();
                 glavni.setBrojStanovnika(brg);
                 glavni.setNaziv(imeg);
                 g.setDrzava(d);
                 g.setNaziv(ime);
+                g.setId(r.getInt(4));
                 g.setBrojStanovnika(br);
                 d.setGlavniGrad(glavni);
                 d.setNaziv(t.getString(1));
@@ -100,17 +132,19 @@ public class GeografijaDAO {
             if(!result.next())return  null;
             else{
                 Statement stmt = conn.createStatement();
-                String query="SELECT naziv, broj_stanovnika FROM grad WHERE drzava="+result.getInt(1);
+                String query="SELECT naziv, broj_stanovnika ,id FROM grad WHERE drzava="+result.getInt(1);
                 ResultSet r=stmt.executeQuery(query);
 
                 String ime=r.getString(1);
                 int brG=r.getInt(2);
                 g.setBrojStanovnika(brG);
                 g.setNaziv(ime);
+                g.setId(r.getInt(3));
                 Drzava d=new Drzava();
                 d.setNaziv(drzava);
                 d.setGlavniGrad(g);
                 g.setDrzava(d);
+                d.setId(result.getInt(1));
                 return g;
             }
         } catch (SQLException e) {
@@ -123,11 +157,11 @@ public class GeografijaDAO {
         try {
             obrisiDr.setString(1, drzava);
             ResultSet result = glavniG.executeQuery();
+            int id=0;
             if(!result.isClosed()){
-            int id=result.getInt(1);
+            id=result.getInt(1);
             Statement stmt = conn.createStatement();
             Statement stmt2 = conn.createStatement();
-
             String query="DELETE FROM grad WHERE drzava="+id;
             String query2="DELETE FROM drzava WHERE id="+id;
             stmt.execute(query);
@@ -145,6 +179,7 @@ public class GeografijaDAO {
             if(!result.next()) return null;
             else {
                int id =result.getInt(1);
+               d.setId(id);
                 Statement stmt = conn.createStatement();
                 String query="SELECT naziv, broj_stanovnika FROM grad WHERE drzava="+id;
                 ResultSet r=stmt.executeQuery(query);
@@ -165,15 +200,11 @@ public class GeografijaDAO {
     public void dodajGrad(Grad grad) {
         Random r=new Random();
         try {
-            String zaDrzavu ="SELECT id FROM drzava WHERE naziv=\'"+grad.getDrzava().getNaziv()+"\'";
-            Statement s=conn.createStatement();
-            ResultSet rs=s.executeQuery(zaDrzavu);
-            int id=rs.getInt(1);
             dodajG.setInt(1,r.nextInt());
             dodajG.setString(2,grad.getNaziv());
             dodajG.setInt(3,grad.getBrojStanovnika());
-            dodajG.setInt(4, id);
-            dodajG.executeQuery();
+            dodajG.setInt(4, grad.getDrzava().getId());
+            dodajG.executeUpdate();
         } catch (SQLException e) {
             System.out.println(e.getMessage());        }
     }
@@ -181,13 +212,9 @@ public class GeografijaDAO {
     public void dodajDrzavu(Drzava drzava) {
         Random r=new Random();
         try {
-            String zaGrad ="SELECT id FROM grad WHERE naziv="+"\'"+drzava.getGlavniGrad().getNaziv()+"\'";
-            Statement s=conn.createStatement();
-            ResultSet rs=s.executeQuery(zaGrad);
-            int id=rs.getInt(1);
             dodajDr.setInt(1,r.nextInt());
             dodajDr.setString(2,drzava.getNaziv());
-            dodajDr.setInt(3, id);
+            dodajDr.setInt(3, drzava.getGlavniGrad().getId());
             dodajDr.execute();
         } catch (SQLException e) {
             System.out.println(e.getMessage());        }
@@ -197,13 +224,9 @@ public class GeografijaDAO {
         try {
             izmijeniGr.setString(1,grad.getNaziv());
             izmijeniGr.setInt(2,grad.getBrojStanovnika());
-            String zaDrzavu ="SELECT id FROM drzava WHERE naziv=\'"+grad.getDrzava().getNaziv()+"\'";
-            Statement s=conn.createStatement();
-            ResultSet rs=s.executeQuery(zaDrzavu);
-            int id=rs.getInt(1);
-            izmijeniGr.setInt(3, id);
-            izmijeniGr.setString(4, grad.getNaziv());
-            izmijeniGr.execute();
+            izmijeniGr.setInt(3, grad.getDrzava().getId());
+            izmijeniGr.setInt(4, grad.getId());
+            izmijeniGr.executeUpdate();
         } catch (SQLException e) {
             System.out.println(e.getMessage());        }
     }

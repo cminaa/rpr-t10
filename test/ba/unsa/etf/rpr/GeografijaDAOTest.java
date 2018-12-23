@@ -1,12 +1,11 @@
 package ba.unsa.etf.rpr;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.util.ArrayList;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 class GeografijaDAOTest {
 
@@ -17,45 +16,57 @@ class GeografijaDAOTest {
         dbfile.delete();
         GeografijaDAO dao = GeografijaDAO.getInstance();
         ArrayList<Grad> gradovi = dao.gradovi();
-        assertEquals("London", gradovi.get(0).getNaziv());
-        assertEquals("Francuska", gradovi.get(1).getDrzava().getNaziv());
+        Assertions.assertEquals("London", gradovi.get(0).getNaziv());
+        Assertions.assertEquals("Francuska", gradovi.get(1).getDrzava().getNaziv());
     }
 
     @Test
     void glavniGrad() {
+        GeografijaDAO.removeInstance();
+        File dbfile = new File("baza.db");
+        dbfile.delete();
         GeografijaDAO dao = GeografijaDAO.getInstance();
         Grad nepoznat = dao.glavniGrad("Bosna i Hercegovina");
-        assertNull(nepoznat);
+        Assertions.assertNull(nepoznat);
         Grad bech = dao.glavniGrad("Austrija");
-        assertEquals("Beč", bech.getNaziv());
+        Assertions.assertEquals("Beč", bech.getNaziv());
     }
 
     @Test
     void obrisiDrzavu() {
+        GeografijaDAO.removeInstance();
+        File dbfile = new File("baza.db");
+        dbfile.delete();
         GeografijaDAO dao = GeografijaDAO.getInstance();
         // Nepostojeća država, neće se desiti ništa
         dao.obrisiDrzavu("Kina");
         ArrayList<Grad> gradovi = dao.gradovi();
-        assertEquals("Pariz", gradovi.get(1).getNaziv());
-        assertEquals("Austrija", gradovi.get(2).getDrzava().getNaziv());
+        Assertions.assertEquals("Pariz", gradovi.get(1).getNaziv());
+        Assertions.assertEquals("Austrija", gradovi.get(2).getDrzava().getNaziv());
     }
 
     @Test
     void obrisiDrzavu2() {
+        GeografijaDAO.removeInstance();
+        File dbfile = new File("baza.db");
+        dbfile.delete();
         GeografijaDAO dao = GeografijaDAO.getInstance();
 
         // Nema gradova Beč i Graz koji su iz austrije
         dao.obrisiDrzavu("Austrija");
 
         ArrayList<Grad> gradovi = dao.gradovi();
-        assertEquals(3, gradovi.size());
-        assertEquals("London", gradovi.get(0).getNaziv());
-        assertEquals("Pariz", gradovi.get(1).getNaziv());
-        assertEquals("Manchester", gradovi.get(2).getNaziv());
+        Assertions.assertEquals(3, gradovi.size());
+        Assertions.assertEquals("London", gradovi.get(0).getNaziv());
+        Assertions.assertEquals("Pariz", gradovi.get(1).getNaziv());
+        Assertions.assertEquals("Manchester", gradovi.get(2).getNaziv());
     }
 
     @Test
     void dodajGrad() {
+        GeografijaDAO.removeInstance();
+        File dbfile = new File("baza.db");
+        dbfile.delete();
         GeografijaDAO dao = GeografijaDAO.getInstance();
         Drzava francuska = dao.nadjiDrzavu("Francuska");
         Grad grad = new Grad();
@@ -66,11 +77,14 @@ class GeografijaDAOTest {
 
         // Marsej je veći od Manchestera i Graza, ali manji od Pariza, Londona i Beča
         ArrayList<Grad> gradovi = dao.gradovi();
-        assertEquals("Marseille", gradovi.get(3).getNaziv());
+        Assertions.assertEquals("Marseille", gradovi.get(3).getNaziv());
     }
 
     @Test
     void dodajDrzavu() {
+        GeografijaDAO.removeInstance();
+        File dbfile = new File("baza.db");
+        dbfile.delete();
         Grad sarajevo = new Grad();
         sarajevo.setNaziv("Sarajevo");
         sarajevo.setBrojStanovnika(500000);
@@ -85,19 +99,22 @@ class GeografijaDAOTest {
 
         // Provjera
         Grad proba = dao.glavniGrad("Bosna i Hercegovina");
-        assertEquals("Sarajevo", proba.getNaziv());
-        assertEquals(java.util.Optional.of(500000), proba.getBrojStanovnika());
-        assertEquals("Bosna i Hercegovina", proba.getDrzava().getNaziv());
+        Assertions.assertEquals("Sarajevo", proba.getNaziv());
+        Assertions.assertEquals(java.util.Optional.of(500000), proba.getBrojStanovnika());
+        Assertions.assertEquals("Bosna i Hercegovina", proba.getDrzava().getNaziv());
     }
 
     @Test
     void izmijeniGrad() {
+        GeografijaDAO.removeInstance();
+        File dbfile = new File("baza.db");
+        dbfile.delete();
         GeografijaDAO dao = GeografijaDAO.getInstance();
         Grad bech = dao.glavniGrad("Austrija");
         bech.setNaziv("Vienna");
         dao.izmijeniGrad(bech);
 
         ArrayList<Grad> gradovi = dao.gradovi();
-        assertEquals("Vienna", gradovi.get(2).getNaziv());
+        Assertions.assertEquals("Vienna", gradovi.get(2).getNaziv());
     }
 }

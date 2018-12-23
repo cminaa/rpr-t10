@@ -3,6 +3,20 @@ package ba.unsa.etf.rpr;
 public class Grad {
     private String naziv;
     private  int brojStanovnika;
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public Grad() {
+
+    }
+
+    private  int id;
+    public int getId() {
+      return id;
+    }
+
     private Drzava drzava;
     public String getNaziv() {
         return naziv;
