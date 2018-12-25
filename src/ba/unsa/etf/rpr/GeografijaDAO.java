@@ -2,7 +2,6 @@ package ba.unsa.etf.rpr;
 
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.Random;
 
 
 public class GeografijaDAO {
