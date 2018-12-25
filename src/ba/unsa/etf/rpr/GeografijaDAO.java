@@ -56,10 +56,10 @@ public class GeografijaDAO {
                 Statement stmt9 = conn.createStatement();
                 stmt.execute("DELETE FROM grad");
                 stmt1.execute("delete from drzava");
-                stmt3.execute("INSERT INTO grad(id,naziv,broj_stanovnika,drzava) VALUES (1,'London',88250000,1)");
+                stmt3.execute("INSERT INTO grad(id,naziv,broj_stanovnika,drzava) VALUES (1,'London',8825000,1)");
                 stmt4.execute("INSERT INTO grad(id,naziv,broj_stanovnika,drzava) VALUES (2,'Beč',1899055,2)");
                 stmt5.execute("INSERT INTO grad(id,naziv,broj_stanovnika,drzava) VALUES (3,'Pariz',2206488,3)");
-                stmt2.execute("INSERT INTO grad(id,naziv,broj_stanovnika,drzava) VALUES (4,'Mancherster', 545500,1)");
+                stmt2.execute("INSERT INTO grad(id,naziv,broj_stanovnika,drzava) VALUES (4,'Manchester', 545500,1)");
                 stmt6.execute("INSERT INTO grad(id,naziv,broj_stanovnika,drzava) VALUES (5,'Graz',280200,2)");
                 stmt7.execute("INSERT INTO drzava(id,naziv,glavni_grad) VALUES (1,'Velika Britanija', 1)");
                 stmt8.execute("INSERT INTO drzava(id,naziv,glavni_grad) VALUES (2,'Austrija',2)");
@@ -175,17 +175,22 @@ public class GeografijaDAO {
 
     public void obrisiDrzavu(String drzava) {
         try {
+            glavniG.setString(1,drzava);
             obrisiDr.setString(1, drzava);
             ResultSet result = glavniG.executeQuery();
-            int id=0;
-            if(!result.isClosed()){
-            id=result.getInt(1);
+            if(!result.next()) {
+                System.out.println("NISTA");
+
+                return;
+            }
+            int id=result.getInt(1);
+            System.out.println("ID: "+id);
             Statement stmt = conn.createStatement();
             Statement stmt2 = conn.createStatement();
             String query="DELETE FROM grad WHERE drzava="+id;
             String query2="DELETE FROM drzava WHERE id="+id;
-            stmt.execute(query);
-            stmt2.execute(query2);}
+            stmt.executeUpdate(query);
+            stmt2.executeUpdate(query2);
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }

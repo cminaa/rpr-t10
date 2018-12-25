@@ -1,10 +1,14 @@
 package ba.unsa.etf.rpr;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Main {
     static String ispisiGradove(){
+        GeografijaDAO.removeInstance();
+        File dbfile = new File("baza.db");
+        dbfile.delete();
         GeografijaDAO geo=GeografijaDAO.getInstance();
         String s="";
         ArrayList<Grad> g=geo.gradovi();
