@@ -1,21 +1,18 @@
 package ba.unsa.etf.rpr;
 
 
-import static ba.unsa.etf.rpr.GeografijaDAO.getD;
-import static ba.unsa.etf.rpr.GeografijaDAO.setD;
-
 public class Drzava {
     private String naziv;
     private Grad glavniGrad;
     private int id;
-
+private int d=3;
     public Drzava() {
-
+    id=d+1;
+    d++;
     }
 
     public Drzava(String naziv, Grad glavniGrad) {
-        this.id = getD()+1;
-        setD(id);
+
         this.naziv = naziv;
         this.glavniGrad = glavniGrad;
     }

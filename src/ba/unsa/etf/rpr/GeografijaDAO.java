@@ -1,6 +1,5 @@
 package ba.unsa.etf.rpr;
 
-import javax.swing.plaf.nimbus.State;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Random;
@@ -20,23 +19,6 @@ public class GeografijaDAO {
     PreparedStatement dodajDr;
     PreparedStatement izmijeniGr;
     PreparedStatement nadjiDr;
-    static int g,d;
-
-    public static int getG() {
-        return g;
-    }
-
-    public static void setG(int g) {
-        GeografijaDAO.g = g;
-    }
-
-    public static int getD() {
-        return d;
-    }
-
-    public static void setD(int d) {
-        GeografijaDAO.d = d;
-    }
 
     private static void initialize() {
         instanca= new GeografijaDAO();
@@ -59,9 +41,9 @@ public class GeografijaDAO {
             Statement s2=null;
             try {
                 s = conn.createStatement();
-                s.execute("CREATE TABLE drzava(id INTEGER,naziv TEXT, glavni_grad INTEGER)");
+                s.execute("CREATE TABLE drzava(id INTEGER primary key,naziv TEXT, glavni_grad INTEGER)");
                 s2=conn.createStatement();
-                s2.execute("CREATE TABLE grad (id INTEGER, naziv TEXT,broj_stanovnika INTEGER,drzava INTEGER)");
+                s2.execute("CREATE TABLE grad (id INTEGER primary key, naziv TEXT,broj_stanovnika INTEGER,drzava INTEGER)");
                 Statement stmt = conn.createStatement();
                 Statement stmt1 = conn.createStatement();
                 Statement stmt2 = conn.createStatement();
@@ -82,8 +64,6 @@ public class GeografijaDAO {
                 stmt7.execute("INSERT INTO drzava(id,naziv,glavni_grad) VALUES (1,'Velika Britanija', 1)");
                 stmt8.execute("INSERT INTO drzava(id,naziv,glavni_grad) VALUES (2,'Austrija',2)");
                 stmt9.execute("INSERT INTO drzava(id,naziv,glavni_grad) VALUES (3,'Francuska',3)");
-                g=5;
-                d=3;
             } catch (SQLException e1) {
                 System.out.println("kreiranje greska");            }
 
@@ -92,8 +72,8 @@ public class GeografijaDAO {
             //conn=DriverManager.getConnection(url);
             glavniG = conn.prepareStatement("SELECT id from drzava WHERE naziv=?");
             obrisiDr = conn.prepareStatement("SELECT id from drzava WHERE naziv=?");
-            dodajDr = conn.prepareStatement("INSERT INTO drzava(id,naziv,glavni_grad) VALUES (?,?,?)");
-            dodajG = conn.prepareStatement("INSERT INTO grad (id,naziv,broj_stanovnika,drzava) VALUES(?,?,?,?)");
+            dodajDr = conn.prepareStatement("INSERT INTO drzava(naziv,glavni_grad) VALUES (?,?)");
+            dodajG = conn.prepareStatement("INSERT INTO grad (naziv,broj_stanovnika,drzava) VALUES(?,?,?)");
             izmijeniGr = conn.prepareStatement("UPDATE grad SET naziv =?, broj_stanovnika = ?,drzava=? WHERE id=?");
             nadjiDr=conn.prepareStatement("SELECT id FROM drzava WHERE naziv=?");
         } catch (SQLException e) {
@@ -238,23 +218,23 @@ public class GeografijaDAO {
     }
 
     public void dodajGrad(Grad grad) {
-        Random r=new Random();
+        //Random r=new Random();
         try {
-            dodajG.setInt(1,r.nextInt());
-            dodajG.setString(2,grad.getNaziv());
-            dodajG.setInt(3,grad.getBrojStanovnika());
-            dodajG.setInt(4, grad.getDrzava().getId());
+          //  dodajG.setInt(1, grad.getId());
+            dodajG.setString(1,grad.getNaziv());
+            dodajG.setInt(2,grad.getBrojStanovnika());
+            dodajG.setInt(3, grad.getDrzava().getId());
             dodajG.executeUpdate();
         } catch (SQLException e) {
             System.out.println(e.getMessage());        }
     }
 
     public void dodajDrzavu(Drzava drzava) {
-        Random r=new Random();
+        //Random r=new Random();
         try {
-            dodajDr.setInt(1,r.nextInt());
-            dodajDr.setString(2,drzava.getNaziv());
-            dodajDr.setInt(3, drzava.getGlavniGrad().getId());
+            //dodajDr.setInt(1,drzava.getId());
+            dodajDr.setString(1,drzava.getNaziv());
+            dodajDr.setInt(2, drzava.getGlavniGrad().getId());
             dodajDr.execute();
         } catch (SQLException e) {
             System.out.println(e.getMessage());        }

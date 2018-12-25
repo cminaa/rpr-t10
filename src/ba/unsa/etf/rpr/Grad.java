@@ -1,25 +1,22 @@
 package ba.unsa.etf.rpr;
 
-import static ba.unsa.etf.rpr.GeografijaDAO.getG;
-import static ba.unsa.etf.rpr.GeografijaDAO.setG;
-
 public class Grad {
     private String naziv;
     private  int brojStanovnika;
-
+    private int g=5;
     public void setId(int id) {
         this.id = id;
     }
 
     public Grad() {
-
+id=g+1;
+g++;
     }
 
     public Grad(String naziv, int brojStanovnika, Drzava drzava) {
         this.naziv = naziv;
         this.brojStanovnika = brojStanovnika;
-        this.id = getG()+1;
-        setG(id);
+
         this.drzava = drzava;
     }
 
