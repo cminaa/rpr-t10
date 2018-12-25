@@ -1,5 +1,6 @@
 package ba.unsa.etf.rpr;
 
+import javax.swing.plaf.nimbus.State;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Random;
@@ -19,6 +20,24 @@ public class GeografijaDAO {
     PreparedStatement dodajDr;
     PreparedStatement izmijeniGr;
     PreparedStatement nadjiDr;
+    static int g,d;
+
+    public static int getG() {
+        return g;
+    }
+
+    public static void setG(int g) {
+        GeografijaDAO.g = g;
+    }
+
+    public static int getD() {
+        return d;
+    }
+
+    public static void setD(int d) {
+        GeografijaDAO.d = d;
+    }
+
     private static void initialize() {
         instanca= new GeografijaDAO();
     }
@@ -29,44 +48,68 @@ public class GeografijaDAO {
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
-        String url="jdbc:sqlite:src\\baza.db";
-        try {
+        String url="jdbc:sqlite:resources\\baza.db";
+        try{
             conn=DriverManager.getConnection(url);
+            Statement s =conn.createStatement();
+            s.execute("SELECT * from grad");
+        }catch (Exception e){
+            System.out.println("nema tabela, kreirat cemo iih");
+            Statement s = null;
+            Statement s2=null;
+            try {
+                s = conn.createStatement();
+                s.execute("CREATE TABLE drzava(id INTEGER,naziv TEXT, glavni_grad INTEGER)");
+                s2=conn.createStatement();
+                s2.execute("CREATE TABLE grad (id INTEGER, naziv TEXT,broj_stanovnika INTEGER,drzava INTEGER)");
+                Statement stmt = conn.createStatement();
+                Statement stmt1 = conn.createStatement();
+                Statement stmt2 = conn.createStatement();
+                Statement stmt3 = conn.createStatement();
+                Statement stmt4 = conn.createStatement();
+                Statement stmt5 = conn.createStatement();
+                Statement stmt6 = conn.createStatement();
+                Statement stmt7 = conn.createStatement();
+                Statement stmt8 = conn.createStatement();
+                Statement stmt9 = conn.createStatement();
+                stmt.execute("DELETE FROM grad");
+                stmt1.execute("delete from drzava");
+                stmt3.execute("INSERT INTO grad(id,naziv,broj_stanovnika,drzava) VALUES (1,'London',88250000,1)");
+                stmt4.execute("INSERT INTO grad(id,naziv,broj_stanovnika,drzava) VALUES (2,'Beč',1899055,2)");
+                stmt5.execute("INSERT INTO grad(id,naziv,broj_stanovnika,drzava) VALUES (3,'Pariz',2206488,3)");
+                stmt2.execute("INSERT INTO grad(id,naziv,broj_stanovnika,drzava) VALUES (4,'Mancherster', 545500,1)");
+                stmt6.execute("INSERT INTO grad(id,naziv,broj_stanovnika,drzava) VALUES (5,'Graz',280200,2)");
+                stmt7.execute("INSERT INTO drzava(id,naziv,glavni_grad) VALUES (1,'Velika Britanija', 1)");
+                stmt8.execute("INSERT INTO drzava(id,naziv,glavni_grad) VALUES (2,'Austrija',2)");
+                stmt9.execute("INSERT INTO drzava(id,naziv,glavni_grad) VALUES (3,'Francuska',3)");
+                g=5;
+                d=3;
+            } catch (SQLException e1) {
+                System.out.println("kreiranje greska");            }
+
+        }
+        try {
+            //conn=DriverManager.getConnection(url);
             glavniG = conn.prepareStatement("SELECT id from drzava WHERE naziv=?");
             obrisiDr = conn.prepareStatement("SELECT id from drzava WHERE naziv=?");
             dodajDr = conn.prepareStatement("INSERT INTO drzava(id,naziv,glavni_grad) VALUES (?,?,?)");
             dodajG = conn.prepareStatement("INSERT INTO grad (id,naziv,broj_stanovnika,drzava) VALUES(?,?,?,?)");
             izmijeniGr = conn.prepareStatement("UPDATE grad SET naziv =?, broj_stanovnika = ?,drzava=? WHERE id=?");
             nadjiDr=conn.prepareStatement("SELECT id FROM drzava WHERE naziv=?");
-          /*  Statement stmt = conn.createStatement();
-            Statement stmt1 = conn.createStatement();
-            Statement stmt2 = conn.createStatement();
-            Statement stmt3 = conn.createStatement();
-            Statement stmt4 = conn.createStatement();
-            Statement stmt5 = conn.createStatement();
-            Statement stmt6 = conn.createStatement();
-            Statement stmt7 = conn.createStatement();
-            Statement stmt8 = conn.createStatement();
-            Statement stmt9 = conn.createStatement();
-            stmt.execute("DELETE FROM grad");
-            stmt1.execute("delete from drzava");
-            stmt3.execute("INSERT INTO grad(id,naziv,broj_stanovnika,drzava) VALUES (1,'London',88250000,1)");
-            stmt4.execute("INSERT INTO grad(id,naziv,broj_stanovnika,drzava) VALUES (2,'Beč',1899055,2)");
-            stmt5.execute("INSERT INTO grad(id,naziv,broj_stanovnika,drzava) VALUES (3,'Pariz',2206488,3)");
-            stmt2.execute("INSERT INTO grad(id,naziv,broj_stanovnika,drzava) VALUES (4,'Mancherster', 545500,1)");
-            stmt6.execute("INSERT INTO grad(id,naziv,broj_stanovnika,drzava) VALUES (5,'Graz',280200,2)");
-            stmt7.execute("INSERT INTO drzava(id,naziv,glavni_grad) VALUES (1,'Velika Britanija', 1)");
-            stmt8.execute("INSERT INTO drzava(id,naziv,glavni_grad) VALUES (2,'Austrija',2)");
-            stmt9.execute("INSERT INTO drzava(id,naziv,glavni_grad) VALUES (3,'Francuska',3)");*/
-
         } catch (SQLException e) {
             e.printStackTrace();
         }
 
     }
 
-    public static void removeInstance() {
-    instanca=null;
+    public static void removeInstance()  {
+        try {
+           if(conn!=null) conn.close();
+           conn=null;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        instanca=null;
     }
 
     public static GeografijaDAO getInstance() {
@@ -77,9 +120,6 @@ public class GeografijaDAO {
     public ArrayList<Grad> gradovi() {
         ArrayList<Grad> gradovi=new ArrayList<>();
         try {
-            if(conn==null){
-                conn=DriverManager.getConnection("jdbc:sqlite:src\\baza.db");
-            }
             Statement stmt = conn.createStatement();
             String query="SELECT naziv, broj_stanovnika, drzava,id FROM grad ORDER BY broj_stanovnika DESC";
             ResultSet r=stmt.executeQuery(query);
