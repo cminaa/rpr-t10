@@ -41,4 +41,8 @@ private int d=3;
     glavniGrad=grad;
     }
 
+    @Override
+    public String toString() {
+        return naziv+" - glavni grad: "+glavniGrad.getNaziv();
+    }
 }

@@ -49,4 +49,9 @@ g++;
     public Integer getBrojStanovnika() {
         return brojStanovnika;
     }
+
+    @Override
+    public String toString() {
+        return naziv+"("+drzava.getNaziv()+") - "+brojStanovnika;
+    }
 }
