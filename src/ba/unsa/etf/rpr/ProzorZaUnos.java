@@ -33,7 +33,7 @@ public class ProzorZaUnos {
 
     public void naziv(ActionEvent actionEvent) {
         if (!nazivD.getText().trim().isEmpty() &&
-        sadrziBroj(nazivD.getText())) {
+        !sadrziBroj(nazivD.getText())) {
             nazivD.getStyleClass().removeAll("poljeNijeIspravno");
             nazivD.getStyleClass().add("poljeIspravno");
             naziv=true;

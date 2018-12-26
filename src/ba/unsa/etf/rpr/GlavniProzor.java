@@ -11,6 +11,8 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Locale;
+import java.util.ResourceBundle;
 
 import static javafx.scene.layout.Region.USE_COMPUTED_SIZE;
 
@@ -119,5 +121,35 @@ static boolean brisanje(){
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    private void PromijeniStage(Locale jezik){
+        Stage primaryStage = (Stage) izmjenaGrada.getScene().getWindow();
+        Locale.setDefault(jezik);
+        ResourceBundle bundle = ResourceBundle.getBundle("Translation");
+        Parent root = null;
+        try {
+            root = FXMLLoader.load(getClass().getResource("glavniProzor.fxml"), bundle);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return;
+        }
+        primaryStage.setScene(new Scene(root, USE_COMPUTED_SIZE, USE_COMPUTED_SIZE));
+        primaryStage.show();
+    }
+    public void bosanski(ActionEvent actionEvent) {
+        PromijeniStage(new Locale("bs","BA"));
+    }
+
+    public void engleski(ActionEvent actionEvent) {
+       PromijeniStage(new Locale("en","US"));
+    }
+
+    public void francuski(ActionEvent actionEvent) {
+        PromijeniStage(new Locale("fr","FR"));
+    }
+
+    public void njemacki(ActionEvent actionEvent) {
+        PromijeniStage(Locale.GERMAN);
     }
 }
