@@ -1,22 +1,11 @@
 package ba.unsa.etf.rpr;
 
-import javafx.application.Application;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Scanner;
-
-import static javafx.application.Application.launch;
-import static javafx.scene.layout.Region.USE_COMPUTED_SIZE;
-import javafx.scene.Scene;
-import javafx.stage.Stage;
 
 
-public class Main extends Application{
-    /*static String ispisiGradove(){
+public class Main {
+    static String ispisiGradove(){
         GeografijaDAO.removeInstance();
         File dbfile = new File("baza.db");
         dbfile.delete();
@@ -32,20 +21,11 @@ public class Main extends Application{
             s+="\n";
         }
         return s;
-    }*/
-
-
-        @Override
-        public void start(Stage primaryStage) throws Exception{
-            GeografijaDAO geo=GeografijaDAO.getInstance();
-            Parent root = FXMLLoader.load(getClass().getResource("glavniProzor.fxml"));
-            primaryStage.setResizable(false);
-            primaryStage.setTitle("Odabir željene akcije");
-            primaryStage.setScene(new Scene(root, USE_COMPUTED_SIZE, USE_COMPUTED_SIZE));
-            primaryStage.show();
-        }
-
-        public static void main(String[] args) {
-        launch(args);
     }
+
+
+    public static void main(String[] args) {
+        ispisiGradove();
+    }
+
 }
