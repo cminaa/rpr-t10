@@ -16,10 +16,19 @@ import static javafx.scene.layout.Region.USE_COMPUTED_SIZE;
 
 public class GlavniProzor {
     public RadioButton izmjenaGrada;
-    public RadioButton brisanjeDrzave;
+
+
+    public static RadioButton brisanjeDrzave;
     public RadioButton ispisGradova;
-    public RadioButton citanjeDrzave;
-    public RadioButton dodavanjeGrada;
+
+
+static boolean brisanje(){
+        boolean selected = brisanjeDrzave.isSelected();
+        return selected;}
+        static boolean citanje(){
+    return citanjeDrzave.isSelected();
+        }
+    public static RadioButton citanjeDrzave;
 
 
     public RadioButton dodavanjeDrzave;
@@ -38,10 +47,46 @@ public class GlavniProzor {
         }
     }
 
-    public void dodajGrad(ActionEvent actionEvent) {
-    }
 
     public void citajDrzavu(ActionEvent actionEvent) {
+        try {
+            Stage noviStage = null;
+            FXMLLoader loader = null;
+            try {
+                loader = new FXMLLoader(getClass().getResource("unosNaziva.fxml"));
+                loader.setController(new UnosNaziva());
+                Parent root = loader.load();
+                noviStage = new Stage();
+                noviStage.setResizable(false);
+                noviStage.setTitle("Ispis podataka o drzavi");
+                noviStage.setScene(new Scene(root, USE_COMPUTED_SIZE, USE_COMPUTED_SIZE));
+                noviStage.show();
+            } catch (Exception exception) {
+                exception.printStackTrace();
+            }
+        }catch (Exception e){
+
+        }
+    }
+    public void brisiDrzavu(ActionEvent actionEvent) {
+        try {
+            Stage noviStage = null;
+            FXMLLoader loader = null;
+            try {
+                loader = new FXMLLoader(getClass().getResource("unosNaziva.fxml"));
+                loader.setController(new UnosNaziva2());
+                Parent root = loader.load();
+                noviStage = new Stage();
+                noviStage.setResizable(false);
+                noviStage.setTitle("Brisanje drzave");
+                noviStage.setScene(new Scene(root, USE_COMPUTED_SIZE, USE_COMPUTED_SIZE));
+                noviStage.show();
+            } catch (Exception exception) {
+                exception.printStackTrace();
+            }
+        }catch (Exception e){
+
+        }
     }
 
     public void ispisiGradove(ActionEvent actionEvent) {
@@ -62,9 +107,17 @@ public class GlavniProzor {
         alert.show();
     }
 
-    public void brisiDrzavu(ActionEvent actionEvent) {
-    }
 
     public void izmijeniGrad(ActionEvent actionEvent) {
+        try {
+            Parent root = FXMLLoader.load(getClass().getResource("izmjena.fxml"));
+            Stage stage = new Stage();
+            stage.setTitle("Izmjena grada");
+            stage.setScene(new Scene(root, USE_COMPUTED_SIZE, USE_COMPUTED_SIZE));
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

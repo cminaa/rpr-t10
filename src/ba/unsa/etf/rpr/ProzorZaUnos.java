@@ -18,7 +18,7 @@ public class ProzorZaUnos {
      for (int i = 0; i <s.length() ; i++) {
          if(!java.lang.Character.isLetter(
                  s.charAt(i)
-         ))return true;
+         )&& s.charAt(i)!=' ')return true;
      }
      return false;
  }

@@ -7,6 +7,11 @@ import java.util.ArrayList;
 public class GeografijaDAO {
     private static GeografijaDAO instanca=null;
 
+    public static boolean isImaDrzave() {
+        return imaDrzave;
+    }
+
+    static boolean imaDrzave;
     public static Connection getConn() {
         return conn;
     }
@@ -179,9 +184,10 @@ public class GeografijaDAO {
             ResultSet result = glavniG.executeQuery();
             if(!result.next()) {
                 System.out.println("NISTA");
-
+                imaDrzave=false;
                 return;
             }
+            imaDrzave=true;
             int id=result.getInt(1);
             System.out.println("ID: "+id);
             Statement stmt = conn.createStatement();
