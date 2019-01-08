@@ -139,10 +139,6 @@
 				<reportElement x="465" y="10" width="84" height="20" uuid="bb10dbe1-0a4f-4722-9953-c163b63cf979"/>
 				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
 			</textField>
-			<image hAlign="Center">
-				<reportElement x="0" y="0" width="65" height="60" uuid="94883631-a913-43e2-b182-ab8d77d0181e"/>
-				<imageExpression><![CDATA["invoice_logo.png"]]></imageExpression>
-			</image>
 			<textField pattern="EEEEE dd MMMMM yyyy">
 				<reportElement x="465" y="30" width="84" height="20" uuid="3836ce65-eca3-4cad-a6de-b1818def0a2b"/>
 				<textFieldExpression><![CDATA["INV0001"]]></textFieldExpression>
@@ -222,24 +218,6 @@
 		</band>
 	</detail>
 	<lastPageFooter>
-		<band height="177">
-			<staticText>
-				<reportElement positionType="Float" x="-1" y="30" width="261" height="101" uuid="1a0d7088-5af7-4865-8be1-41ec5f51fb36"/>
-				<box>
-					<topPen lineWidth="1.1" lineStyle="Dashed"/>
-					<leftPen lineWidth="1.1" lineStyle="Dashed"/>
-					<bottomPen lineWidth="1.1" lineStyle="Dashed"/>
-					<rightPen lineWidth="1.1" lineStyle="Dashed"/>
-				</box>
-				<text><![CDATA[Your notes here]]></text>
-			</staticText>
-			<staticText>
-				<reportElement positionType="Float" mode="Opaque" x="0" y="147" width="556" height="30" backcolor="#E6E8E9" uuid="36aa233d-4305-48e6-974a-1bbf89bb3c8f"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Serif" size="9" isItalic="true"/>
-				</textElement>
-				<text><![CDATA[THANKYOU FOR YOUR BUSINESS]]></text>
-			</staticText>
-		</band>
+		<band height="177"/>
 	</lastPageFooter>
 </jasperReport>

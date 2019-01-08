@@ -175,7 +175,7 @@ static boolean brisanje(){
         try {
             new GradoviReport().save(selectedFile.getAbsolutePath(), GeografijaDAO.getConn());
         } catch (Exception e) {
-            System.out.println( e.getMessage() );
+            e.printStackTrace();
         }
     }
 

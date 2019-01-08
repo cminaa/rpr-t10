@@ -26,7 +26,7 @@ public class GradoviReport {
     }
 
     public void save( String fileName, Connection c ) throws JRException, IOException {
-        String reportSrcFile = getClass().getResource("/reports/TutorijalReport.jrxml").getFile();
+        String reportSrcFile = getClass().getResource("/reports/gradovi.jrxml").getFile();
         String reportsDir = getClass().getResource("/reports/").getFile();
         JasperReport jasperReport = JasperCompileManager.compileReport(reportSrcFile);
         // Fields for resources path
