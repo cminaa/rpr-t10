@@ -6,9 +6,11 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.RadioButton;
+import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Locale;
@@ -93,7 +95,7 @@ static boolean brisanje(){
 
     public void ispisiGradove(ActionEvent actionEvent) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Ispis gradova iz baze");
+        alert.setTitle( "Ispis gradova iz baze");
         alert.setHeaderText("Gradovi prisutni u bazi su:");
         String s="";
         ArrayList<Grad> g=GeografijaDAO.getInstance().gradovi();
@@ -152,4 +154,29 @@ static boolean brisanje(){
     public void njemacki(ActionEvent actionEvent) {
         PromijeniStage(Locale.GERMAN);
     }
+
+    public void sacuvaj(ActionEvent actionEvent) {
+        FileChooser fc = new FileChooser();
+        FileChooser.ExtensionFilter xslmExtenizija = new FileChooser.ExtensionFilter("XSLX", "*.xslx");
+        fc.getExtensionFilters().add( xslmExtenizija );
+        FileChooser.ExtensionFilter docxExtenzija = new FileChooser.ExtensionFilter("DOCX", "*.docx");
+        fc.getExtensionFilters().add( docxExtenzija );
+        FileChooser.ExtensionFilter pdfExtenzija = new FileChooser.ExtensionFilter("PDF", "*.pdf");
+        fc.getExtensionFilters().add( pdfExtenzija );
+        fc.setTitle("Saving a file");
+        File selectedFile = fc.showSaveDialog(null);
+
+        if (selectedFile != null)
+            sacuvajFajl(selectedFile);
+    }
+
+    private void sacuvajFajl(File selectedFile) {
+
+        try {
+            new GradoviReport().save(selectedFile.getAbsolutePath(), GeografijaDAO.getConn());
+        } catch (Exception e) {
+            System.out.println( e.getMessage() );
+        }
+    }
+
 }

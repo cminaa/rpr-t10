@@ -47,8 +47,14 @@
                         <MenuItem mnemonicParsing="false" onAction="#njemacki" text="%gr" />
                     </items>
                   </Menu>
+                  <MenuItem mnemonicParsing="false" text="%print" />
                </items>
           </Menu>
+            <Menu mnemonicParsing="false" text="%fajl">
+              <items>
+                <MenuItem mnemonicParsing="false" onAction="#sacuvaj" text="%save" />
+              </items>
+            </Menu>
         </menus>
       </MenuBar>
    </children>
